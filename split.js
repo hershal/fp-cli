@@ -14,10 +14,10 @@ const rl = readline.createInterface({
 });
 
 rl.on('line', (line) => {
-  console.log(processLine(line));
+  console.log(processLine(line, inputDelimeter, outputDelimeter));
 });
 
-function processLine(line) {
+function processLine(line, inputDelimeter, outputDelimeter, field) {
   const processed = _.split(line, inputDelimeter);
 
   // if you're asking for a specific field, then return that
@@ -26,3 +26,23 @@ function processLine(line) {
   }
   return _.join(processed, outputDelimeter);
 }
+
+function api(input, args) {
+  if (typeof input == 'string') {
+    input = _.split(input, '\n');
+  }
+
+  // to avoid the 'not defined' exception
+  if (!util.defined(args)) {
+    args = {};
+  }
+
+  let inputDelimeter = util.decode(args.inputDelimeter, ' ');
+  let outputDelimeter = util.decode(args.outputDelimeter, '\n');
+  let field = util.decode(args.f, undefined);
+
+  return _(input)
+    .map((line) => processLine(line, inputDelimeter, outputDelimeter, field))
+    .join('\n');
+}
+module.exports = api;
