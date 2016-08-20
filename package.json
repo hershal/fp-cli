@@ -2,9 +2,8 @@
   "name": "fp-cli",
   "version": "0.0.1",
   "description": "functional programming constructs in your shell",
-  "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "bin": {
     "join": "./join.js",
@@ -15,5 +14,9 @@
   "dependencies": {
     "lodash": "^4.15.0",
     "minimist": "^1.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
   }
 }
