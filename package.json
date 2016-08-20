@@ -1,0 +1,19 @@
+{
+  "name": "fp-cli",
+  "version": "0.0.1",
+  "description": "functional programming constructs in your shell",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "bin": {
+    "join": "./join.js",
+    "split": "./split.js"
+  },
+  "author": "Hershal Bhave",
+  "license": "ISC",
+  "dependencies": {
+    "lodash": "^4.15.0",
+    "minimist": "^1.2.0"
+  }
+}
