@@ -6,8 +6,8 @@
     "test": "mocha"
   },
   "bin": {
-    "join": "./join.js",
-    "split": "./split.js"
+    "fjoin": "./join.js",
+    "fsplit": "./split.js"
   },
   "author": "Hershal Bhave",
   "license": "ISC",
