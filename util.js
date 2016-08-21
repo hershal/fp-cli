@@ -4,11 +4,11 @@ function defined(arg) {
 }
 
 module.exports.select = select;
-function select(value1, value2, predicatefn) {
-  if (predicatefn()) {
-    return value1;
+function select(valueTrue, valueFalse, predicate) {
+  if (predicate) {
+    return valueTrue;
   }
-  return value2;
+  return valueFalse;
 }
 
 module.exports.decode = decode;
