@@ -5,21 +5,32 @@ const args = require('./parser')();
 const readline = require('readline');
 const util = require('./util');
 
-const inputDelimeter = util.decode(args.d, ' ');
-const fields = _.split(util.decode(args.f, undefined), ',');
-const outputDelimeter = util.decode(
-  args.o, util.select('\n', ' ', typeof fields == 'undefined'));
+function main() {
+  const options = decodeOptions(args);
 
-const rl = readline.createInterface({
-  input: process.stdin
-});
+  const rl = readline.createInterface({
+    input: process.stdin
+  });
 
-rl.on('line', (line) => {
-  console.log(processLine(line, inputDelimeter, outputDelimeter, fields));
-});
+  rl.on('line', (line) => {
+    console.log(
+      processLine(line, options.inputDelimeter,
+                  options.outputDelimeter, options.fields));
+  });
+}
+
+function decodeOptions(args) {
+  const fields = _.split(util.decode(args.f, undefined), ',');
+  const inputDelimeter = util.decode(args.d, ' ');
+  const outputDelimeter = util.decode(
+    args.o, util.select('\n', ' ', typeof fields == 'undefined'));
+
+  return { fields, inputDelimeter, outputDelimeter };
+}
 
 function processLine(line, inputDelimeter, outputDelimeter, fields) {
   const processed = _.split(line, inputDelimeter);
+
   // if you're asking for a specific field, then return that
   if (util.defined(fields)) {
     return _(fields).map((num) => processed[num]).join(outputDelimeter);
@@ -37,12 +48,13 @@ function api(input, args) {
     args = {};
   }
 
-  const inputDelimeter = util.decode(args.inputDelimeter, ' ');    // string
-  const outputDelimeter = util.decode(args.outputDelimeter, '\n'); // string
-  const fields = util.decode(args.f, undefined); // array
+  const options = decodeOptions(args);
 
   return _(input)
-    .map((line) => processLine(line, inputDelimeter, outputDelimeter, fields))
+    .map((line) => processLine(line, options.inputDelimeter,
+                               options.outputDelimeter, options.fields))
     .join('\n');
 }
 module.exports = api;
+
+main();
