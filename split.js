@@ -38,6 +38,7 @@ function processLine(line, inputDelimeter, outputDelimeter, fields) {
   return _.join(processed, outputDelimeter);
 }
 
+module.exports = api;
 function api(input, args) {
   if (typeof input == 'string') {
     input = _.split(input, '\n');
@@ -55,6 +56,5 @@ function api(input, args) {
                                options.outputDelimeter, options.fields))
     .join('\n');
 }
-module.exports = api;
 
 main();
