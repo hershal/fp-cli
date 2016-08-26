@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 
 const _ = require('lodash');
-const args = require('./parser')();
 const readline = require('readline');
+
+const args = require('./parser')();
 const util = require('./util');
 
 function main() {
@@ -14,28 +15,33 @@ function main() {
 
   rl.on('line', (line) => {
     console.log(
-      processLine(line, options.inputDelimeter,
-                  options.outputDelimeter, options.fields));
+      processLine(line, options));
   });
 }
 
-function decodeOptions(args) {
-  const fields = _.split(util.decode(args.f, undefined), ',');
-  const inputDelimeter = util.decode(args.d, ' ');
+function normalizeOptions(args) {
+  return { f: args['fields'],
+           i: args['inputDelimeter'],
+           o: args['outpuDelimeter'] };
+}
+
+function decodeOptions(rawArgs) {
+  const args = _.merge(normalizeOptions(rawArgs), rawArgs);
+  const fields = util.defined(args.f) ? _.split(args.f, ',') : undefined;
+  const inputDelimeter = util.decode(args.i, ' ');
   const outputDelimeter = util.decode(
-    args.o, util.select('\n', ' ', typeof fields == 'undefined'));
+    args.o, util.select(' ', '\n', util.defined(args.f)));
 
   return { fields, inputDelimeter, outputDelimeter };
 }
 
-function processLine(line, inputDelimeter, outputDelimeter, fields) {
-  const processed = _.split(line, inputDelimeter);
-
+function processLine(line, options) {
+  const processed = _.split(line, options.inputDelimeter);
   // if you're asking for a specific field, then return that
-  if (util.defined(fields)) {
-    return _(fields).map((num) => processed[num]).join(outputDelimeter);
+  if (util.defined(options.fields)) {
+    return _(options.fields).map((num) => processed[num]).join(options.outputDelimeter);
   }
-  return _.join(processed, outputDelimeter);
+  return _.join(processed, options.outputDelimeter);
 }
 
 module.exports = api;
@@ -50,10 +56,8 @@ function api(input, args) {
   }
 
   const options = decodeOptions(args);
-
   return _(input)
-    .map((line) => processLine(line, options.inputDelimeter,
-                               options.outputDelimeter, options.fields))
+    .map((line) => processLine(line, options))
     .join('\n');
 }
 
