@@ -32,14 +32,24 @@ function decodeOptions(rawArgs) {
   const args = _.merge(normalizeOptions(rawArgs), rawArgs);
   const fields = util.defined(args.f) ? _.split(args.f, ',') : undefined;
   const inputDelimeter = util.decode(args.i, ' ');
+  const trim = util.decode(args.t, true);
   const outputDelimeter = util.decode(
     args.o, util.select(' ', '\n', util.defined(args.f)));
 
-  return { fields, inputDelimeter, outputDelimeter };
+  return { trim, fields, inputDelimeter, outputDelimeter };
 }
 
 function processLine(line, options) {
-  const processed = _.split(line, options.inputDelimeter);
+  let processed = line.toString();
+
+  // trim if asked for
+  if (options.trim) {
+    processed = processed.replace(/\s+/g, ' ');
+  }
+
+  // do the split
+  processed = _.split(processed, options.inputDelimeter);
+
   // if you're asking for a specific field, then return that
   if (util.defined(options.fields)) {
     return _(options.fields).map((num) => processed[num]).join(options.outputDelimeter);
