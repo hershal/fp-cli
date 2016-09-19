@@ -9,8 +9,8 @@ const util = require('./util');
 const NewlineSerializer = require('./newline-serializer');
 
 function main() {
-  const options = decodeOptions(args);
-  let serializer = new NewlineSerializer();
+  const options = util.decodeOptions(args);
+  const serializer = new NewlineSerializer();
 
   let table = new cliTable(
     {head: '', chars:
@@ -32,31 +32,9 @@ function main() {
 }
 
 function processLine(line, table, options) {
-  let processed = line;
-
-  if (options.trim) {
-    processed = processed.replace(/\s+/, ' ').trim();
-  }
-
+  let processed = util.preprocess(line, options);
   const tableEntry = processed.split(options.inputDelimeter);
   table.push(tableEntry);
-}
-
-function decodeOptions(rawArgs) {
-  const args = _.merge(normalizeOptions(rawArgs), rawArgs);
-  const fields = util.defined(args.f) ? _.split(args.f, ',') : undefined;
-  const inputDelimeter = util.decode(args.i, ' ');
-  const trim = util.decode(args.t, true);
-
-  return { trim, fields, inputDelimeter };
-}
-
-function normalizeOptions(args) {
-  return {
-    t: args['trim'],
-    f: args['fields'],
-    i: args['inputDelimeter']
-  };
 }
 
 main();
