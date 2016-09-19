@@ -57,7 +57,7 @@ function processLine(line, options) {
 
   // trim if asked for
   if (options.trim) {
-    processed = processed.replace(/\s+/g, ' ');
+    processed = processed.replace(/\s+/g, ' ').trim();
   }
 
   // do the split

@@ -35,7 +35,7 @@ function processLine(line, table, options) {
   let processed = line;
 
   if (options.trim) {
-    processed = processed.replace(/\s+/, ' ');
+    processed = processed.replace(/\s+/, ' ').trim();
   }
 
   const tableEntry = processed.split(options.inputDelimeter);
