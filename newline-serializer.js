@@ -1,11 +1,10 @@
 class NewlineSerializer {
   constructor() {
-    // data left over from any previous 'data'
+    // data left over from any previous data chunk
     this.buffer = '';
   }
 
   serialize(rawData, callback) {
-
     let data = rawData.toString().split('\n');
 
     if (data.length > 0) {
