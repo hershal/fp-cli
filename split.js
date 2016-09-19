@@ -6,16 +6,29 @@ const readline = require('readline');
 const args = require('./parser')();
 const util = require('./util');
 
+const NewlineSerializer = require('./newline-serializer');
+
 function main() {
   const options = decodeOptions(args);
 
-  const rl = readline.createInterface({
-    input: process.stdin
+  let serializer = new NewlineSerializer();
+
+  process.stdin.on('data', (data) => {
+    serializer.serialize(data, (line) => {
+      console.log(processLine(line, options));
+    });
   });
 
-  rl.on('line', (line) => {
-    console.log(
-      processLine(line, options));
+  process.stdin.on('close', () => {
+    serializer.flush('', (line) => {
+      console.log(processLine(line, options));
+    });
+  });
+
+  process.stdout.on('error', (err) => {
+    if (err.code == 'EPIPE') {
+      process.exit(0);
+    }
   });
 }
 
