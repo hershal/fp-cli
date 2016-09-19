@@ -7,11 +7,13 @@
   },
   "bin": {
     "fjoin": "./join.js",
-    "fsplit": "./split.js"
+    "fsplit": "./split.js",
+    "table": "./table.js"
   },
   "author": "Hershal Bhave",
   "license": "ISC",
   "dependencies": {
+    "cli-table2": "^0.2.0",
     "lodash": "^4.15.0",
     "minimist": "^1.2.0"
   },
