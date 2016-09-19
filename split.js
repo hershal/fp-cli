@@ -20,9 +20,12 @@ function main() {
 }
 
 function normalizeOptions(args) {
-  return { f: args['fields'],
-           i: args['inputDelimeter'],
-           o: args['outpuDelimeter'] };
+  return {
+    t: args['trim'],
+    f: args['fields'],
+    i: args['inputDelimeter'],
+    o: args['outpuDelimeter']
+  };
 }
 
 function decodeOptions(rawArgs) {
