@@ -35,7 +35,8 @@ function processLine(line, options) {
   let processed = util.preprocess(line, options);
 
   // do the split
-  processed = _.split(processed, options.inputDelimeter);
+  let inputDelim = util.decode(options.inputRegex, options.inputDelimeter);
+  processed = _.split(processed, inputDelim);
 
   // if you're asking for a specific field, then return that
   if (util.defined(options.fields)) {

@@ -27,6 +27,7 @@ function normalizeOptions(args) {
     t: args['trim'],
     f: args['fields'],
     i: args['inputDelimeter'],
+    r: args['inputRegex'],
     o: args['outpuDelimeter']
   };
 }
@@ -36,11 +37,12 @@ function decodeOptions(rawArgs) {
   const args = _.merge(normalizeOptions(rawArgs), rawArgs);
   const fields = defined(args.f) ? _.split(args.f, ',') : undefined;
   const inputDelimeter = decode(args.i, ' ');
+  const inputRegex = decodeRegex(args.r);
   const trim = decode(args.t, true);
   const outputDelimeter = decode(
     args.o, select(' ', '\n', defined(args.f)));
 
-  return { trim, fields, inputDelimeter, outputDelimeter };
+  return { trim, fields, inputDelimeter, inputRegex, outputDelimeter };
 }
 
 module.exports.preprocess = preprocess;
@@ -50,4 +52,15 @@ function preprocess(rawLine, options) {
     line = line.replace(/\s+/g, ' ').trim();
   }
   return line;
+}
+
+function decodeRegex(input) {
+  let regex = input;
+  let options = '';
+  try {
+    const re = new RegExp(regex, options);
+    return re;
+  } catch(e) {
+    return undefined;
+  }
 }
